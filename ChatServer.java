@@ -5,7 +5,7 @@ import java.nio.channels.*;
 import java.nio.charset.*;
 import java.util.*;
 
-public class Server {
+public class ChatServer {
     // A pre-allocated buffer for the received data
     static private final ByteBuffer buffer = ByteBuffer.allocate(16384);
 
