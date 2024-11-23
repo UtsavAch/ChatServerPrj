@@ -18,6 +18,7 @@ public class ChatServer {
     static private final Map<SocketChannel, String> nicknames = new HashMap<>();
     static private final Map<SocketChannel, String> rooms = new HashMap<>();
     static private final Map<String, Set<SocketChannel>> roomMembers = new HashMap<>();
+    static private final Map<SocketChannel, String> clientState = new HashMap<>();//TO BE USED FOR STATES
 
 
     static public void main(String args[]) throws Exception {
@@ -155,6 +156,8 @@ public class ChatServer {
         String[] parts = command.split(" ", 2);
         String cmd = parts[0];
         String arg = (parts.length > 1) ? parts[1] : null;
+
+        //System.out.println(Arrays.toString(parts));//debug
 
         switch (cmd) {
             case "/nick":

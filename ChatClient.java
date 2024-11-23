@@ -18,9 +18,10 @@ public class ChatClient {
     private BufferedReader in;
     private PrintWriter out;
 
-    // Constructor
+    // Construtor
     public ChatClient(String server, int port) throws IOException {
-        // GUI setup --- *DO NOT MODIFY*
+
+        // Inicialização da interface gráfica --- * NÃO MODIFICAR *
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -36,9 +37,8 @@ public class ChatClient {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    newMessage(chatBox.getText()); // Sending message from the user
+                    newMessage(chatBox.getText());
                 } catch (IOException ex) {
-                    printMessage("Error sending message. Please try again.\n");
                 } finally {
                     chatBox.setText("");
                 }
@@ -48,20 +48,8 @@ public class ChatClient {
             public void windowOpened(WindowEvent e) {
                 chatBox.requestFocusInWindow();
             }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                try {
-                    if (socket != null && !socket.isClosed()) {
-                        out.println("/bye");
-                        socket.close();
-                    }
-                } catch (IOException ex) {
-                    System.err.println("Error during client shutdown: " + ex.getMessage());
-                }
-            }
         });
-        // --- End of GUI setup
+    // --- Fim da inicialização da interface gráfica
 
         // NETWORKING SETUP
         socket = new Socket(server, port);
@@ -77,7 +65,7 @@ public class ChatClient {
     //METHOD TO SEND A NEW MESSAGE TO THE CERVER (----------May still need to modify---------)
     public void newMessage(String message) throws IOException {
         // Send the message to the server
-        out.println(message);
+        out.println(message + "\n");
 
         // If the message is a disconnect command, close the socket
         if (message.equalsIgnoreCase("/bye")) {
@@ -85,14 +73,14 @@ public class ChatClient {
             socket.close();
         } else {
             // Show the message in the chat area with blue background for sender
-            printMessage(message);
+            printMessage(message + "\n");
         }
     }
 
     // Método a usar para acrescentar uma string à caixa de texto
     // * NÃO MODIFICAR *
     public void printMessage(final String message) {
-        chatArea.append(message + "\n");
+        chatArea.append(message);
     }
 
 
@@ -109,7 +97,7 @@ public class ChatClient {
                     break;
                 } else {
                     // General messages
-                    printMessage(response);
+                    printMessage(response + "\n");
                 }
             }
         } catch (IOException ex) {
@@ -122,6 +110,7 @@ public class ChatClient {
     }
 
     // Main method to start the client
+    // * DO NOT MODIFY *
     public static void main(String[] args) throws IOException {
         if (args.length != 2) {
             System.err.println("Usage: java ChatClient <server> <port>");
