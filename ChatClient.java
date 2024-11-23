@@ -89,23 +89,10 @@ public class ChatClient {
         }
     }
 
-    // // METHOD TO PRINT A MESSAGE TO THE CHAT AREA (----------May still need to modify---------)
-    // public void printMessage(final String message) {
-    //     // Creating a new JPanel to hold the message
-    //     JPanel messagePanel = new JPanel();
-    //     messagePanel.setLayout(new BorderLayout());
-    //     JTextArea messageArea = new JTextArea(message);
-    //     messageArea.setEditable(false);
-
-    //     messagePanel.add(messageArea, BorderLayout.CENTER);
-    //     chatArea.append(message + "\n");
-    //     chatArea.setCaretPosition(chatArea.getDocument().getLength()); // Auto-scroll to the latest message
-    // }
-
-       // Método a usar para acrescentar uma string à caixa de texto
+    // Método a usar para acrescentar uma string à caixa de texto
     // * NÃO MODIFICAR *
     public void printMessage(final String message) {
-        chatArea.append(message);
+        chatArea.append(message + "\n");
     }
 
 
