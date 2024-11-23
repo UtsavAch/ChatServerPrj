@@ -14,6 +14,10 @@ public class ChatServer {
     static private final CharsetDecoder decoder = charset.newDecoder();
     static private final CharsetEncoder encoder = charset.newEncoder(); // Encoder for sending data back
 
+    static private final String STATE_INIT = "init";
+    static private final String STATE_OUTSIDE = "outside";
+    static private final String STATE_INSIDE = "inside";
+
     // Maps to manage state
     static private final Map<SocketChannel, String> nicknames = new HashMap<>();
     static private final Map<SocketChannel, String> rooms = new HashMap<>();
@@ -79,6 +83,10 @@ public class ChatServer {
 
                         // Register it with the selector, for reading
                         sc.register(selector, SelectionKey.OP_READ);
+
+                        // Initialize the state for the new client
+                        clientState.put(sc, STATE_INIT);
+                        System.out.println("Client connected: INIT state set.");//debug
 
                     } else if (key.isReadable()) {
 
@@ -184,6 +192,7 @@ public class ChatServer {
         String oldNickname = nicknames.put(sc, nickname);
         if (oldNickname == null) {
             sendMessage(sc, "OK");
+            //state to outside
         } else {
             sendMessage(sc, "OK");
             String room = rooms.get(sc); // Get the current room, if any
@@ -212,6 +221,7 @@ public class ChatServer {
 
         sendMessage(sc, "OK");
         notifyRoom(sc, "JOINED " + nicknames.get(sc), room);
+        //state to inside
         return true;
     }
 
@@ -226,6 +236,7 @@ public class ChatServer {
         roomMembers.get(room).remove(sc);
         notifyRoom(sc, "LEFT " + nicknames.get(sc), room);
         sendMessage(sc, "OK");
+        //state to outside
         return true;
     }
 
@@ -233,6 +244,7 @@ public class ChatServer {
     static private boolean handleBye(SocketChannel sc) throws IOException {
         disconnectUser(sc, null);
         sendMessage(sc, "BYE");
+        //state not inside
         return false;
     }
 
