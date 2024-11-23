@@ -36,9 +36,9 @@ public class ChatClient {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    newMessage(chatBox.getText(), true); // Sending message from the user
+                    newMessage(chatBox.getText()); // Sending message from the user
                 } catch (IOException ex) {
-                    printMessage("Error sending message. Please try again.\n", true);
+                    printMessage("Error sending message. Please try again.\n");
                 } finally {
                     chatBox.setText("");
                 }
@@ -69,38 +69,45 @@ public class ChatClient {
         out = new PrintWriter(socket.getOutputStream(), true);
 
         // Display a welcome message
-        printMessage("Connected to the server at " + server + ":" + port + "\n", false);
-        printMessage("Use /nick <name> to set your nickname, /join <room> to join a room, and /leave to leave the room.\n", false);
-        printMessage("Type /bye to disconnect.\n", false);
+        printMessage("Connected to the server at " + server + ":" + port + "\n");
+        printMessage("Use /nick <name> to set your nickname, /join <room> to join a room, and /leave to leave the room.\n");
+        printMessage("Type /bye to disconnect.\n");
     }
 
     //METHOD TO SEND A NEW MESSAGE TO THE CERVER (----------May still need to modify---------)
-    public void newMessage(String message, boolean isSender) throws IOException {
+    public void newMessage(String message) throws IOException {
         // Send the message to the server
         out.println(message);
 
         // If the message is a disconnect command, close the socket
         if (message.equalsIgnoreCase("/bye")) {
-            printMessage("Disconnected from the server.\n", false);
+            printMessage("Disconnected from the server.\n");
             socket.close();
         } else {
             // Show the message in the chat area with blue background for sender
-            printMessage(message, isSender);
+            printMessage(message);
         }
     }
 
-    // METHOD TO PRINT A MESSAGE TO THE CHAT AREA (----------May still need to modify---------)
-    public void printMessage(final String message, boolean isSender) {
-        // Creating a new JPanel to hold the message
-        JPanel messagePanel = new JPanel();
-        messagePanel.setLayout(new BorderLayout());
-        JTextArea messageArea = new JTextArea(message);
-        messageArea.setEditable(false);
+    // // METHOD TO PRINT A MESSAGE TO THE CHAT AREA (----------May still need to modify---------)
+    // public void printMessage(final String message) {
+    //     // Creating a new JPanel to hold the message
+    //     JPanel messagePanel = new JPanel();
+    //     messagePanel.setLayout(new BorderLayout());
+    //     JTextArea messageArea = new JTextArea(message);
+    //     messageArea.setEditable(false);
 
-        messagePanel.add(messageArea, BorderLayout.CENTER);
-        chatArea.append(message + "\n");
-        chatArea.setCaretPosition(chatArea.getDocument().getLength()); // Auto-scroll to the latest message
+    //     messagePanel.add(messageArea, BorderLayout.CENTER);
+    //     chatArea.append(message + "\n");
+    //     chatArea.setCaretPosition(chatArea.getDocument().getLength()); // Auto-scroll to the latest message
+    // }
+
+       // Método a usar para acrescentar uma string à caixa de texto
+    // * NÃO MODIFICAR *
+    public void printMessage(final String message) {
+        chatArea.append(message);
     }
+
 
     // Main client loop for receiving messages
     public void run() throws IOException {
@@ -109,17 +116,17 @@ public class ChatClient {
             while ((response = in.readLine()) != null) {
                 // Handle specific server responses
                 if (response.startsWith("ERROR")) {
-                    printMessage("Error: Invalid command or action.\n", false);
+                    printMessage("Error: Invalid command or action.\n");
                 } else if (response.equalsIgnoreCase("BYE")) {
-                    printMessage("Disconnected from the server.\n", false);
+                    printMessage("Disconnected from the server.\n");
                     break;
                 } else {
                     // General messages
-                    printMessage(response, false);
+                    printMessage(response);
                 }
             }
         } catch (IOException ex) {
-            printMessage("Connection lost. Please try reconnecting.\n", false);
+            printMessage("Connection lost. Please try reconnecting.\n");
         } finally {
             if (socket != null && !socket.isClosed()) {
                 socket.close();
