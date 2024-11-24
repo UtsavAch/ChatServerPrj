@@ -161,11 +161,15 @@ public class ChatServer {
 
     //HANDLE COMMAND
     static private boolean handleCommand(SocketChannel sc, String command) throws IOException {
-        String[] parts = command.split(" ", 2);
+        String[] parts = command.split(" ", 3);
         String cmd = parts[0];
         String arg = (parts.length > 1) ? parts[1] : null;
+        String arg1 = (parts.length > 2) ? parts[2] : null; // for priv command
 
-        //System.out.println(Arrays.toString(parts));//debug
+
+        System.out.println(Arrays.toString(parts));//debug
+        System.out.println(arg);//debug
+        System.out.println(arg1);//debug
 
         switch (cmd) {
             case "/nick":
@@ -176,9 +180,28 @@ public class ChatServer {
                 return handleLeave(sc);
             case "/bye":
                 return handleBye(sc);
+            case "/priv":
+                return handlePriv(sc, arg, arg1);
             default:
                 sendMessage(sc, "ERROR");
                 return true;
+        }
+    }
+    //HANDLE PRIV
+    static private boolean handlePriv(SocketChannel sc, String receiver, String message) throws IOException {
+        if (receiver == null || message == null || !nicknames.containsValue(receiver)){
+            sendMessage(sc, "ERROR");
+            return true;
+
+        } else {
+            for (SocketChannel s : nicknames.keySet()){
+                if (nicknames.get(s).equals(receiver)){
+                    sendMessage(s, "PRIVATE " + nicknames.get(sc) + " " + message);
+                    break;
+                }
+            }
+            sendMessage(sc, "OK");
+            return true;
         }
     }
 
