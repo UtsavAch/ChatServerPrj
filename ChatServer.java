@@ -192,7 +192,8 @@ public class ChatServer {
         String oldNickname = nicknames.put(sc, nickname);
         if (oldNickname == null) {
             sendMessage(sc, "OK");
-            //state to outside
+            clientState.put(sc, STATE_OUTSIDE); //state to outside
+            System.out.println("Client connected: OUTSIDE state set.");//debug
         } else {
             sendMessage(sc, "OK");
             String room = rooms.get(sc); // Get the current room, if any
@@ -221,7 +222,8 @@ public class ChatServer {
 
         sendMessage(sc, "OK");
         notifyRoom(sc, "JOINED " + nicknames.get(sc), room);
-        //state to inside
+        clientState.put(sc, STATE_INSIDE); //state to inside
+        System.out.println("Client connected: INSIDE state set.");//debug
         return true;
     }
 
@@ -236,15 +238,18 @@ public class ChatServer {
         roomMembers.get(room).remove(sc);
         notifyRoom(sc, "LEFT " + nicknames.get(sc), room);
         sendMessage(sc, "OK");
-        //state to outside
+        clientState.put(sc, STATE_OUTSIDE);//state to outside
+        System.out.println("Client connected: OUTSIDE state set.");//debug
         return true;
     }
 
     //HANDLE BYE
     static private boolean handleBye(SocketChannel sc) throws IOException {
-        disconnectUser(sc, null);
         sendMessage(sc, "BYE");
         //state not inside
+        clientState.put(sc, STATE_OUTSIDE);//state to outside
+        System.out.println("Client connected: OUTSIDE state set.");//debug
+        disconnectUser(sc, null);
         return false;
     }
 
