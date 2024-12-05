@@ -65,7 +65,7 @@ public class ChatClient {
     //METHOD TO SEND A NEW MESSAGE TO THE CERVER (----------May still need to modify---------)
     public void newMessage(String message) throws IOException {
         // Send the message to the server
-        out.println(message + "\n");
+        out.println(message);
 
         // If the message is a disconnect command, close the socket
         if (message.equalsIgnoreCase("/bye")) {
@@ -93,6 +93,7 @@ public class ChatClient {
                 if (response.startsWith("ERROR")) {
                     printMessage("Error: Invalid command or action.\n");
                 } else if (response.equalsIgnoreCase("BYE")) {
+                    printMessage("BYE"+"\n");
                     printMessage("Disconnected from the server.\n");
                     break;
                 } else {

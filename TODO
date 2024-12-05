@@ -13,13 +13,11 @@
 
 - Implement clients states **DONE**
 
-- Buffer (allow /ni<CTR-D>ck <CTR-D>na<CTR-D>me) experiment in terminal `nc localhost 8000` and type the the comands
+- Buffer (allow /ni<CTR-D>ck <CTR-D>na<CTR-D>me) experiment in terminal `nc localhost 8000` and type the the comands **DONE**
 
-- We must process newline in diferent way, i dont think you must send and receive, from client and protocol, messages with \n
-
-- BYE message does not apear, i think its a client problem, it closes before receiving message
+- disconnect appears twice when BYE, i think its a client problem
 
 # LATER
 
-- add a class that encapsulates all info, istead of 4 map structures?
+- add a class that encapsulates all info, istead of 4 map structures? NOW 5 maps!
 my idea would be to create a class ClientContext that has state, nickname and room and outside a map with a key SocketChanel and value ClientContext

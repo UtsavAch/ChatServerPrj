@@ -23,7 +23,8 @@ public class ChatServer {
     static private final Map<SocketChannel, String> rooms = new HashMap<>();
     static private final Map<String, Set<SocketChannel>> roomMembers = new HashMap<>();
     static private final Map<SocketChannel, String> clientState = new HashMap<>();//TO BE USED FOR STATES
-
+    // A global StringBuilder to hold incomplete messages
+    static private final Map<SocketChannel, StringBuilder> incompleteMessages = new HashMap<>();
 
     static public void main(String args[]) throws Exception {
         // Parse port from command line
@@ -141,22 +142,33 @@ public class ChatServer {
     static private boolean processInput(SocketChannel sc, Selector selector, SelectionKey key) throws IOException {
         buffer.clear();
         int bytesRead = sc.read(buffer);
-        buffer.flip();
 
         if (bytesRead == -1) {
             disconnectUser(sc, key);
             return false;
         }
 
-        String message = decoder.decode(buffer).toString().trim();
+        buffer.flip();
 
+        String message = decoder.decode(buffer).toString();
         System.out.println("Received message: " + message);  // Debugging
 
-        if (message.startsWith("/")) {
-            return handleCommand(sc, message);
-        } else {
-            return handleMessage(sc, message);
+        StringBuilder clientBuffer = incompleteMessages.computeIfAbsent(sc, k -> new StringBuilder());
+        clientBuffer.append(message); // Append the new data
+        int newlineIndex = clientBuffer.indexOf("\n");
+        System.out.println("newlineIndex: " + newlineIndex);  // Debugging
+        while (newlineIndex != -1){
+            String completeMessage = clientBuffer.substring(0,newlineIndex).trim();
+            clientBuffer.delete(0, newlineIndex + 1);
+            System.out.println("Complete message extracted: [" + completeMessage + "]"); // debug
+
+            if (completeMessage.startsWith("/")) {
+                return handleCommand(sc, completeMessage);
+            } else {
+                return handleMessage(sc, completeMessage);
+            }
         }
+        return true;
     }
 
     //HANDLE COMMAND
@@ -304,7 +316,9 @@ public class ChatServer {
             notifyRoom(sc, "LEFT " + nicknames.get(sc), room);
         }
         nicknames.remove(sc);
+        incompleteMessages.remove(sc);
         sc.close();
+        System.out.println("Client disconnected: " + sc); //debug
     }
 
     //SEND MESSAGE
