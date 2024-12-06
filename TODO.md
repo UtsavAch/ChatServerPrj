@@ -21,5 +21,5 @@
 
 # LATER IF WE HAVE TIME!
 
-- add a class that encapsulates all info, istead of 4 map structures? NOW 5 maps!
+- add a class that encapsulates all info, istead of 4 map structures? **NOW 5 maps!**
 my idea would be to create a class ClientContext that has state, nickname and room and outside a map with a key SocketChanel and value ClientContext
