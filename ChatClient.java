@@ -83,6 +83,35 @@ public class ChatClient {
         }
         return true;
     }
+
+    private String friendlyMessage(String message){
+        String splitMessage[] = message.split(" ");
+        String header = splitMessage[0];
+        String newMessage = "";
+
+        switch (header) {
+            case "OK":
+                return "Ok: Message received sucessfuly";
+            case "ERROR":
+                return "Error: Message sent was unsuccessful";
+            case "MESSAGE":
+                newMessage += splitMessage[1] + ": ";
+                for (int i = 2; i < splitMessage.length; i++){
+                    newMessage += splitMessage[i] + " ";
+                }
+                return newMessage;
+            case "NEWNICK":
+                return splitMessage[1] + " changed name to " + splitMessage[2];
+            case "JOINED":
+                return splitMessage[1] + " joined the room";
+            case "LEFT":
+                return splitMessage[1] + " leaft the room";
+            case "BYE":
+                return "Goodbye!";
+            default:
+                return "Unknown message received";
+        }
+    }
     
     
     //METHOD TO SEND A NEW MESSAGE TO THE SERVER
@@ -118,7 +147,7 @@ public class ChatClient {
             String response;
             while ((response = in.readLine()) != null) {
                 // Handle specific server responses
-                if (response.startsWith("ERROR")) {
+                /*if (response.startsWith("ERROR")) {
                     printMessage("Error: Invalid command or action.\n");
                 } else if (response.equalsIgnoreCase("BYE")) {
                     printMessage("BYE"+"\n");
@@ -127,7 +156,8 @@ public class ChatClient {
                 } else {
                     // General messages
                     printMessage(response + "\n");
-                }
+                }*/
+                printMessage(friendlyMessage(response) + "\n");
             }
         } catch (IOException ex) {
             printMessage("Connection lost. Please try reconnecting.\n");
