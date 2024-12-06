@@ -62,14 +62,41 @@ public class ChatClient {
         printMessage("Type /bye to disconnect.\n");
     }
 
-    //METHOD TO SEND A NEW MESSAGE TO THE CERVER (----------May still need to modify---------)
+    private boolean checkIfCommand(String message){ //FIXME: IT IS TO SEE IF IT IS A COMMAND
+        if (message.startsWith("/")){
+            String[] parts = message.split(" ", 3);
+            String cmd = parts[0];
+            switch (cmd) { //FIXME: IT SHOULD NOT BREAK BUT RETURN TRUE or FALSE
+                case "/nick":
+                    break;
+                case "/join":
+                    break;
+                case "/leave":
+                    break;
+                case "/bye":
+                    break;
+                case "/priv":
+                    break;
+                default:
+                    break;
+            }
+            
+        }
+        return true;
+    }
+    
+    
+    //METHOD TO SEND A NEW MESSAGE TO THE SERVER
     public void newMessage(String message) throws IOException {
+
+        //if (checkIfCommand(message)) //FIXME: IT IS TO SEE IF IT IS A COMMAND
+
         // Send the message to the server
         out.println(message);
 
         // If the message is a disconnect command, close the socket
         if (message.equalsIgnoreCase("/bye")) {
-            printMessage("Disconnected from the server.\n");
+        //    printMessage("Disconnected from the server.\n");
             socket.close();
         } else {
             // Show the message in the chat area with blue background for sender

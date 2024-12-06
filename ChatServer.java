@@ -23,7 +23,6 @@ public class ChatServer {
     static private final Map<SocketChannel, String> rooms = new HashMap<>();
     static private final Map<String, Set<SocketChannel>> roomMembers = new HashMap<>();
     static private final Map<SocketChannel, String> clientState = new HashMap<>();//TO BE USED FOR STATES
-    // A global StringBuilder to hold incomplete messages
     static private final Map<SocketChannel, StringBuilder> incompleteMessages = new HashMap<>();
 
     static public void main(String args[]) throws Exception {
@@ -156,7 +155,7 @@ public class ChatServer {
         StringBuilder clientBuffer = incompleteMessages.computeIfAbsent(sc, k -> new StringBuilder());
         clientBuffer.append(message); // Append the new data
         int newlineIndex = clientBuffer.indexOf("\n");
-        System.out.println("newlineIndex: " + newlineIndex);  // Debugging
+        System.out.println("newlineIndex: " + newlineIndex);  // debug
         while (newlineIndex != -1){
             String completeMessage = clientBuffer.substring(0,newlineIndex).trim();
             clientBuffer.delete(0, newlineIndex + 1);
