@@ -154,14 +154,16 @@ public class ChatServer {
 
         StringBuilder clientBuffer = incompleteMessages.computeIfAbsent(sc, k -> new StringBuilder());
         clientBuffer.append(message); // Append the new data
+        
         int newlineIndex = clientBuffer.indexOf("\n");
         System.out.println("newlineIndex: " + newlineIndex);  // debug
+
         while (newlineIndex != -1){
             String completeMessage = clientBuffer.substring(0,newlineIndex).trim();
             clientBuffer.delete(0, newlineIndex + 1);
             System.out.println("Complete message extracted: [" + completeMessage + "]"); // debug
 
-            if (completeMessage.startsWith("/")) {
+            if (completeMessage.startsWith("/") && !completeMessage.startsWith("//")) {
                 return handleCommand(sc, completeMessage);
             } else {
                 return handleMessage(sc, completeMessage);

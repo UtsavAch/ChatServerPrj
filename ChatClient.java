@@ -62,25 +62,24 @@ public class ChatClient {
         printMessage("Type /bye to disconnect.\n");
     }
 
-    private boolean checkIfCommand(String message){ //FIXME: IT IS TO SEE IF IT IS A COMMAND
+    private boolean checkIfCommand(String message){
         if (message.startsWith("/")){
             String[] parts = message.split(" ", 3);
             String cmd = parts[0];
-            switch (cmd) { //FIXME: IT SHOULD NOT BREAK BUT RETURN TRUE or FALSE
+            switch (cmd) {
                 case "/nick":
-                    break;
+                    return true;
                 case "/join":
-                    break;
+                    return true;
                 case "/leave":
-                    break;
+                    return true;
                 case "/bye":
-                    break;
+                    return true;
                 case "/priv":
-                    break;
+                    return true;
                 default:
-                    break;
+                    return false;
             }
-            
         }
         return true;
     }
@@ -89,10 +88,12 @@ public class ChatClient {
     //METHOD TO SEND A NEW MESSAGE TO THE SERVER
     public void newMessage(String message) throws IOException {
 
-        //if (checkIfCommand(message)) //FIXME: IT IS TO SEE IF IT IS A COMMAND
-
-        // Send the message to the server
-        out.println(message);
+        if (!checkIfCommand(message)){ 
+            out.println( "/" + message);
+        } else {
+            // Send the message to the server
+            out.println(message);
+        }
 
         // If the message is a disconnect command, close the socket
         if (message.equalsIgnoreCase("/bye")) {

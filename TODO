@@ -17,7 +17,7 @@
 
 - **DONE** disconnect appears twice when BYE, i think its a client problem 
 
-- deal with `/notacommand` it should print ERROR if not in chat, if in chat it should send to the server `//notacommand` and the server sees it has 2 `/` and sends it as a `MESSAGE user /notacommand`
+- **DONE** deal with `/notacommand` it should print ERROR if not in chat, if in chat it should send to the server `//notacommand` and the server sees it has 2 `/` and sends it as a `MESSAGE user /notacommand`
 
 # LATER IF WE HAVE TIME!
 
