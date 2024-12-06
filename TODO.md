@@ -1,5 +1,5 @@
 # Doubts
-- Is it is supose to appear message in textbox?
+- Is it is supose to appear message in textbox ? e.g: /nick Name shoudl it appear in textbox?
 
 - Does the server must also send message to client?
 
