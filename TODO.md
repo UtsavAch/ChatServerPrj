@@ -9,7 +9,7 @@
 # TODO
 - **DONE** Implement priv messages 
 
-- Pretify the messages 
+- **DONE** Pretify the messages 
 
 - **DONE** Implement clients states 
 
