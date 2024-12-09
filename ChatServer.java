@@ -156,7 +156,7 @@ public class ChatServer {
         clientBuffer.append(message);
         
         int newlineIndex = clientBuffer.indexOf("\n");
-        System.out.println("newlineIndex: " + newlineIndex);// debug
+        //System.out.println("newlineIndex: " + newlineIndex);// debug
 
         while (newlineIndex != -1){
             String completeMessage = clientBuffer.substring(0,newlineIndex).trim();
@@ -180,9 +180,9 @@ public class ChatServer {
         String arg1 = (parts.length > 2) ? parts[2] : null;// for priv command
 
 
-        System.out.println(Arrays.toString(parts));//debug
-        System.out.println(arg);//debug
-        System.out.println(arg1);//debug
+        //System.out.println(Arrays.toString(parts));//debug
+        //System.out.println(arg);//debug
+        //System.out.println(arg1);//debug
 
         switch (cmd) {
             case "/nick":
