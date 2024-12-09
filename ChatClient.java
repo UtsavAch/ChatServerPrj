@@ -1,6 +1,6 @@
 import java.io.*;
 import java.net.*;
-import java.util.*;
+//import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -62,6 +62,7 @@ public class ChatClient {
         printMessage("Type /bye to disconnect.\n");
     }
 
+    // METHOD TO ENSURE IF IS A REAL COMMAND OR JUST A MESSAGE WITH '/' IN THE BEGGINIG
     private boolean checkIfCommand(String message){
         if (message.startsWith("/")){
             String[] parts = message.split(" ", 3);
@@ -84,6 +85,7 @@ public class ChatClient {
         return true;
     }
 
+    // METHOD TO CREATE A MORE FRIENDLY MESSAGE FOR CLIENT
     private String friendlyMessage(String message){
         String splitMessage[] = message.split(" ");
         String header = splitMessage[0];
@@ -126,7 +128,6 @@ public class ChatClient {
 
         // If the message is a disconnect command, close the socket
         if (message.equalsIgnoreCase("/bye")) {
-        //    printMessage("Disconnected from the server.\n");
             socket.close();
         } else {
             // Show the message in the chat area with blue background for sender
@@ -146,17 +147,6 @@ public class ChatClient {
         try {
             String response;
             while ((response = in.readLine()) != null) {
-                // Handle specific server responses
-                /*if (response.startsWith("ERROR")) {
-                    printMessage("Error: Invalid command or action.\n");
-                } else if (response.equalsIgnoreCase("BYE")) {
-                    printMessage("BYE"+"\n");
-                    printMessage("Disconnected from the server.\n");
-                    break;
-                } else {
-                    // General messages
-                    printMessage(response + "\n");
-                }*/
                 printMessage(friendlyMessage(response) + "\n");
             }
         } catch (IOException ex) {

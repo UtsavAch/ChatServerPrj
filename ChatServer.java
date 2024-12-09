@@ -19,10 +19,10 @@ public class ChatServer {
     static private final String STATE_INSIDE = "inside";
 
     // Maps to manage state
-    static private final Map<SocketChannel, String> nicknames = new HashMap<>();
+    static private final Map<SocketChannel, String> nicknames = new HashMap<>(); 
     static private final Map<SocketChannel, String> rooms = new HashMap<>();
     static private final Map<String, Set<SocketChannel>> roomMembers = new HashMap<>();
-    static private final Map<SocketChannel, String> clientState = new HashMap<>();//TO BE USED FOR STATES
+    static private final Map<SocketChannel, String> clientState = new HashMap<>();
     static private final Map<SocketChannel, StringBuilder> incompleteMessages = new HashMap<>();
 
     static public void main(String args[]) throws Exception {
@@ -150,18 +150,18 @@ public class ChatServer {
         buffer.flip();
 
         String message = decoder.decode(buffer).toString();
-        System.out.println("Received message: " + message);  // Debugging
+        System.out.println("Received message: " + message);//debug
 
         StringBuilder clientBuffer = incompleteMessages.computeIfAbsent(sc, k -> new StringBuilder());
-        clientBuffer.append(message); // Append the new data
+        clientBuffer.append(message);
         
         int newlineIndex = clientBuffer.indexOf("\n");
-        System.out.println("newlineIndex: " + newlineIndex);  // debug
+        System.out.println("newlineIndex: " + newlineIndex);// debug
 
         while (newlineIndex != -1){
             String completeMessage = clientBuffer.substring(0,newlineIndex).trim();
             clientBuffer.delete(0, newlineIndex + 1);
-            System.out.println("Complete message extracted: [" + completeMessage + "]"); // debug
+            System.out.println("Complete message extracted: [" + completeMessage + "]");// debug
 
             if (completeMessage.startsWith("/") && !completeMessage.startsWith("//")) {
                 return handleCommand(sc, completeMessage);
@@ -177,7 +177,7 @@ public class ChatServer {
         String[] parts = command.split(" ", 3);
         String cmd = parts[0];
         String arg = (parts.length > 1) ? parts[1] : null;
-        String arg1 = (parts.length > 2) ? parts[2] : null; // for priv command
+        String arg1 = (parts.length > 2) ? parts[2] : null;// for priv command
 
 
         System.out.println(Arrays.toString(parts));//debug
@@ -228,11 +228,11 @@ public class ChatServer {
         String oldNickname = nicknames.put(sc, nickname);
         if (oldNickname == null) {
             sendMessage(sc, "OK");
-            clientState.put(sc, STATE_OUTSIDE); //state to outside
+            clientState.put(sc, STATE_OUTSIDE);//state to outside
             System.out.println("Client connected: OUTSIDE state set.");//debug
         } else {
             sendMessage(sc, "OK");
-            String room = rooms.get(sc); // Get the current room, if any
+            String room = rooms.get(sc);
             if (room != null) {
                 notifyRoom(sc, "NEWNICK " + oldNickname + " " + nickname, room);
             }
@@ -258,7 +258,7 @@ public class ChatServer {
 
         sendMessage(sc, "OK");
         notifyRoom(sc, "JOINED " + nicknames.get(sc), room);
-        clientState.put(sc, STATE_INSIDE); //state to inside
+        clientState.put(sc, STATE_INSIDE);//state to inside
         System.out.println("Client connected: INSIDE state set.");//debug
         return true;
     }
@@ -300,7 +300,7 @@ public class ChatServer {
 
         String nickname = nicknames.get(sc);
         if (message.startsWith("//")) {
-            message = message.substring(1); // Unescape leading slash
+            message = message.substring(1);// unescape leading slash
         }
 
         String fullMessage = "MESSAGE " + nickname + " " + message;
@@ -319,7 +319,7 @@ public class ChatServer {
         nicknames.remove(sc);
         incompleteMessages.remove(sc);
         sc.close();
-        System.out.println("Client disconnected: " + sc); //debug
+        System.out.println("Client disconnected: " + sc);//debug
     }
 
     //SEND MESSAGE
